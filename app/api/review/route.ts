@@ -2,6 +2,8 @@ import { GoogleGenerativeAI } from "@google/generative-ai";
 import { NextResponse } from "next/server";
 import { auth } from "@clerk/nextjs/server";
 import prisma from "../../../lib/prisma";
+import { jsonrepair } from 'jsonrepair';
+
 const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY!);
 
 export async function POST(request: Request) {
@@ -51,6 +53,8 @@ export async function POST(request: Request) {
     }
 
     Avoid returning objects with 'description' keys. Each item in the arrays should be plain text.
+    Solution_code must be plain string.
+    Ensure the JSON is properly escaped and does not include code block markers. Return only valid JSON.
 
     Code to review:
     ${code}
@@ -62,14 +66,15 @@ export async function POST(request: Request) {
     const result = await model.generateContent(prompt);
     const response = result.response;
     const text = response.text();
-    const cleanText = text
-      .replace(/^```json\s*|\s*```$/g, "")
-      // .replace(/`([^`]*)`/g, "$1");
-     
-    const review = JSON.parse(cleanText);
-
-
-
+    let review
+    try {
+      const cleanText = text.replace(/^```json\s*|\s*```$/g, "");
+      const repairedText = jsonrepair(cleanText);
+      review = JSON.parse(repairedText);
+    } catch (error) {
+      console.error("Failed to repair and parse response:", error);
+    }
+    
      await prisma.codeReview.create({
       data: {
         code,

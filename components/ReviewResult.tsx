@@ -192,7 +192,7 @@ export default function ReviewResult({
               )}
 
               {review  &&
-                Object.values(review).every((arr) => arr.length === 0) && (
+                Object.values(review).every((arr) => arr?.length === 0) && (
                   <Alert>
                     <AlertDescription>
                       No issues found! Your code looks great.
