@@ -1,100 +1,115 @@
-import Image from "next/image";
+import { auth } from '@clerk/nextjs/server';
+import Link from 'next/link';
+import { Button } from '@/components/ui/button';
+import { ArrowRight, Code2, Shield, Zap, FileCode } from 'lucide-react';
+import { SignInButton, SignUpButton } from '@clerk/nextjs';
 
-export default function Home() {
+export default async function HomePage() {
+  const { userId } = await auth();
+
   return (
-    <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-      <main className="flex flex-col gap-8 row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="https://nextjs.org/icons/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="list-inside list-decimal text-sm text-center sm:text-left font-[family-name:var(--font-geist-mono)]">
-          <li className="mb-2">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] px-1 py-0.5 rounded font-semibold">
-              app/page.tsx
-            </code>
-            .
-          </li>
-          <li>Save and see your changes instantly.</li>
-        </ol>
+    <div className="container mx-auto px-4 py-16">
+      {/* Hero Section */}
+      <div className="max-w-4xl mx-auto text-center">
+        <h1 className="text-6xl font-bold mb-8 mt-10">
+          AI-Powered Code Reviews & Test Case Generation
+        </h1>
+        <p className="text-xl text-gray-600 mb-10">
+          Transform the way you write and review code. Detect bugs, optimize performance, and auto-generate comprehensive test cases with cutting-edge AI.
+        </p>
+        {!userId ? (
+          <div className="flex justify-center gap-4">
+            <SignInButton mode="modal">
+              <Button size="lg">Get Started</Button>
+            </SignInButton>
+            <SignUpButton mode="modal">
+              <Button size="lg" variant="outline">Sign Up</Button>
+            </SignUpButton>
+          </div>
+        ) : (
+          <Link href="/dashboard">
+            <Button size="lg">
+              Go to Dashboard
+              <ArrowRight className="ml-2" />
+            </Button>
+          </Link>
+        )}
+      </div>
 
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="https://nextjs.org/icons/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:min-w-44"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
+      {/* Features Section */}
+      <div className="grid md:grid-cols-4 gap-10 mt-20">
+        <div className="p-6 rounded-lg shadow-lg">
+          <Code2 className="w-12 h-12 text-blue-500 mb-4" />
+          <h2 className="text-2xl font-semibold mb-3">Smart Analysis</h2>
+          <p className="text-gray-600">
+            AI algorithms analyze code for bugs, style issues, and improvements.
+          </p>
         </div>
-      </main>
-      <footer className="row-start-3 flex gap-6 flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="https://nextjs.org/icons/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="https://nextjs.org/icons/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="https://nextjs.org/icons/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
+        <div className="p-6 rounded-lg shadow-lg">
+          <Shield className="w-12 h-12 text-green-500 mb-4" />
+          <h2 className="text-2xl font-semibold mb-3">Security First</h2>
+          <p className="text-gray-600">
+            Identify vulnerabilities and get recommendations to secure your code.
+          </p>
+        </div>
+        <div className="p-6 rounded-lg shadow-lg">
+          <Zap className="w-12 h-12 text-yellow-500 mb-4" />
+          <h2 className="text-2xl font-semibold mb-3">Performance Tips</h2>
+          <p className="text-gray-600">
+            Get AI-powered insights on performance optimizations.
+          </p>
+        </div>
+        <div className="p-6 rounded-lg shadow-lg">
+          <FileCode className="w-12 h-12 text-purple-500 mb-4" />
+          <h2 className="text-2xl font-semibold mb-3">AI Test Case Generation</h2>
+          <p className="text-gray-600">
+            Automatically generate test cases to ensure robust and error-free code.
+          </p>
+        </div>
+      </div>
+
+      {/* Call to Action Section */}
+      <div className="bg-blue-600  text-center py-20 mt-20 rounded-lg">
+        <h2 className="text-4xl font-bold mb-6">Boost Productivity with AI-Driven Reviews</h2>
+        <p className="text-xl mb-8">Start improving your code quality today with our AI-powered tools.</p>
+        <SignUpButton mode="modal">
+          <Button size="lg" variant="outline">
+            Try for Free
+          </Button>
+        </SignUpButton>
+      </div>
+
+      {/* Testimonials Section */}
+      <div className="mt-24">
+        <h2 className="text-4xl font-bold text-center mb-12">What Our Users Say</h2>
+        <div className="grid md:grid-cols-3 gap-10">
+          <div className="p-6 border rounded-lg">
+            <p className="text-gray-700 mb-4">
+              "This tool transformed our development workflow. The AI insights are incredibly accurate!"
+            </p>
+            <p className="text-blue-600 font-semibold">- John D.</p>
+          </div>
+          <div className="p-6 border rounded-lg">
+            <p className="text-gray-700 mb-4">
+              "Auto-generating test cases saved us countless hours of manual work. Highly recommend!"
+            </p>
+            <p className="text-blue-600 font-semibold">- Sarah K.</p>
+          </div>
+          <div className="p-6 border rounded-lg">
+            <p className="text-gray-700 mb-4">
+              "The security checks gave us peace of mind and ensured our app was ready for production."
+            </p>
+            <p className="text-blue-600 font-semibold">- David L.</p>
+          </div>
+        </div>
+      </div>
+
+      {/* Footer Section */}
+      <footer className="mt-24 bg-gray-800 text-white py-10">
+        <div className="container mx-auto flex flex-col md:flex-row justify-center">
+          <p>&copy; 2025 AI Code Reviewer. All rights reserved.</p>
+         
+        </div>
       </footer>
     </div>
   );
