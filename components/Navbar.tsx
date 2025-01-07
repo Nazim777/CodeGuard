@@ -29,7 +29,7 @@ export default function Navbar() {
       <div className="container mx-auto px-4 h-16 flex items-center justify-between">
         <div className="flex items-center gap-6">
           <Link href="/" className="text-xl font-bold">
-            AI Code Review
+            CodeGuard
           </Link>
           
           {user && (
